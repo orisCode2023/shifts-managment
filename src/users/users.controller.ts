@@ -21,14 +21,19 @@ export class UsersController {
   findOne(@Param('id') id: number) {
     return this.usersService.findOne(+id);
   }
+  @Get(':username')
+  findOneByUsername(@Param('username') username: string) {
+    return this.usersService.findOneByUsername(username);
+  }
+
   @Post()
-  createUser(@Body() user: { name: string; roll: string }) {
+  createUser(@Body() user: { name: string; email: string; password: string; role: string }) {
     return this.usersService.createUser(user);
   }
   @Patch(':id')
   updateUser(
     @Param('id') id: string,
-    @Body() updatedUser: { name: string; roll: string },
+    @Body() updatedUser: { name: string; role: string },
   ) {
     return this.usersService.updateUser(+id, updatedUser);
   }

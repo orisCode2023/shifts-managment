@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class UsersService {
     private users = [
-        { id: 1, name: 'John Doe', roll: 'commander' },
-         { id: 2, name: 'Jane Smith', roll: 'soldier' }];
+        { id: 1, name: 'John Doe', email: 'john@example.com', password: 'password123', role: 'commander' },
+         { id: 2, name: 'Jane Smith', email: 'jane@example.com', password: 'password456', role: 'soldier' }];
         
 
     findAll() {
@@ -14,7 +14,10 @@ export class UsersService {
     findOne(id: number) {
         return this.users.find(user => user.id === id);
     }
-    createUser(user: {name: string; roll: string }) {
+    findOneByUsername(username: string) {
+        return this.users.find(user => user.name === username);
+    }
+    createUser(user: {name: string; email: string; password: string; role: string }) {
         const newId = this.users.length + 1;
         const userWithId = { id: newId, ...user };
         this.users.push(userWithId);
@@ -23,13 +26,13 @@ export class UsersService {
 
     removeUser(id: number) {
         this.users = this.users.filter(user => user.id !== id);
-        
+
     }
-    updateUser(id: number, updatedUser: { name: string; roll: string }) {
+    updateUser(id: number, updatedUser: { name: string; role: string }) {
         const user = this.findOne(+id);
         if (user) {
             user.name = updatedUser.name || user.name;
-            user.roll = updatedUser.roll || user.roll;
+            user.role = updatedUser.role || user.role;
             return user;
         } else {
             throw new Error('User not found');
