@@ -15,7 +15,7 @@ export class UsersService {
         return this.users.find(user => user.id === id);
     }
     findOneByUsername(username: string) {
-        return this.users.find(user => user.name === username);
+        return this.users.find((user) => user.name === username);
     }
     createUser(user: {name: string; email: string; password: string; role: string }) {
         const newId = this.users.length + 1;
