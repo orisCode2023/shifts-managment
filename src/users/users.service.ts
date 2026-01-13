@@ -15,19 +15,22 @@ export class UsersService {
         return this.users.find(user => user.id === id);
     }
     createUser(user: {name: string; roll: string }) {
-        const newId = this.users.length ? this.users[this.users.length - 1].id + 1 : 1;
+        const newId = this.users.length + 1;
         const userWithId = { id: newId, ...user };
         this.users.push(userWithId);
+        return userWithId;
     }
 
     removeUser(id: number) {
         this.users = this.users.filter(user => user.id !== id);
+        
     }
     updateUser(id: number, updatedUser: { name: string; roll: string }) {
         const user = this.findOne(+id);
         if (user) {
             user.name = updatedUser.name || user.name;
             user.roll = updatedUser.roll || user.roll;
+            return user;
         } else {
             throw new Error('User not found');
         }
