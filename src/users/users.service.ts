@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 export class UsersService {
     private users = [
         { id: 1, name: 'John Doe', email: 'john@example.com', password: 'password123', role: 'commander' },
-         { id: 2, name: 'Jane Smith', email: 'jane@example.com', password: 'password456', role: 'soldier' }];
-        
+        { id: 2, name: 'Jane Smith', email: 'jane@example.com', password: 'password456', role: 'soldier' }];
+
 
     findAll() {
         return this.users;
@@ -14,10 +14,12 @@ export class UsersService {
     findOne(id: number) {
         return this.users.find(user => user.id === id);
     }
-    findOneByUsername(username: string) {
-        return this.users.find((user) => user.name === username);
+    findOneByUsername(name: string) {
+        const user = this.users.find(user => user.name === name);
+        console.log({ u: user, name })
+        return user
     }
-    createUser(user: {name: string; email: string; password: string; role: string }) {
+    createUser(user: { name: string; email: string; password: string; role: string }) {
         const newId = this.users.length + 1;
         const userWithId = { id: newId, ...user };
         this.users.push(userWithId);
