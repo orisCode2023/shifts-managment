@@ -10,10 +10,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
   async signIn(
-    username: string,
+    name: string,
     password: string,
   ): Promise<{ access_token: string }> {
-    const user = this.usersService.findOneByUsername(username);
+    const user = this.usersService.findOneByUsername(name);
     if (user && await bcrypt.compare(password, user.password)) {
       const payload = { username: user.name, sub: user.id };
       return {
@@ -22,13 +22,13 @@ export class AuthService {
     }
     throw new Error('Invalid credentials');
   }
-  async signUp(
-    name: string,
-    email: string,
-    password: string,
-    role: string,
-  ) {
-    const user = await this.usersService.createUser({ name, email, password, role });
-    return { user };
+  async signUp(user: { name: string; email: string; password: string; role: string }) {
+
+    const existingUser = this.usersService.findOneByUsername(user.name);
+    if (existingUser) {
+      throw new Error('User already exists');
+    } else {
+      return await this.usersService.createUser(user);
+    }
   }
 }

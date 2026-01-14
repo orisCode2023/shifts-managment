@@ -21,7 +21,7 @@ export class UsersService {
     async createUser(user: { name: string; email: string; password: string; role: string }) {
         const {password ,...rest} = user;
         const saltOrRounds = 10;
-        const hash = await bcrypt.hash(user.password, saltOrRounds);
+        const hash = await bcrypt.hash(password, saltOrRounds);
         const newId = this.users.length + 1;
         const newUser = { id: newId, password: hash, ...rest };
         this.users.push(newUser);                                                      
