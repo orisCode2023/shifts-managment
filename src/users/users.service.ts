@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -15,16 +16,17 @@ export class UsersService {
         return this.users.find(user => user.id === id);
     }
     findOneByUsername(name: string) {
-        const user = this.users.find(user => user.name === name);
-        console.log({ u: user, name })
-        return user
+        return this.users.find(user => user.name === name);
     }
-    createUser(user: { name: string; email: string; password: string; role: string }) {
+    async createUser(user: { name: string; email: string; password: string; role: string }) {
+        const {password ,...rest} = user;
+        const saltOrRounds = 10;
+        const hash = await bcrypt.hash(user.password, saltOrRounds);
         const newId = this.users.length + 1;
-        const userWithId = { id: newId, ...user };
-        this.users.push(userWithId);
-        return userWithId;
-    }
+        const newUser = { id: newId, password: hash, ...rest };
+        this.users.push(newUser);                                                      
+        return newUser;
+    }     
 
     removeUser(id: number) {
         this.users = this.users.filter(user => user.id !== id);
